@@ -63,8 +63,8 @@ public class PemakaianObatControllerTest {
 		Barang barang = new ObatFarmasi("Keterangan");
 		barang.setHarga(20000l);
 		barang.setJumlah(20l);
-		barang.setKode("BHP01");
-		barang.setNama("Obat");
+		barang.setKode("OBxxx");
+		barang.setNama("Obat xxx");
 		barang.setSatuan("Satuan");
 		barang.setTanggungan(Tanggungan.BPJS);
 		
@@ -72,8 +72,8 @@ public class PemakaianObatControllerTest {
 		penduduk.setAgama("Kristen");
 		penduduk.setDarah("O");
 		penduduk.setKelamin(Kelamin.PRIA);
-		penduduk.setNama("Penduduk 1");
-		penduduk.setNik("Nik 1");
+		penduduk.setNama("Penduduk xxx");
+		penduduk.setNik("Nik xxx");
 		penduduk.setTanggalLahir(DateUtil.getDate());
 		penduduk.setTelepon("Telepon");
 		penduduk.generateKode();
@@ -109,8 +109,8 @@ public class PemakaianObatControllerTest {
 				.content("{\"obat\": {"
 						+ "\"harga\": \"20000\","
 						+ "\"jumlah\": \"100\","
-						+ "\"kode\": \"BHP02\","
-						+ "\"nama\":\"BHP 2\","
+						+ "\"kode\": \"OBxxxx\","
+						+ "\"nama\":\"Obat xxxx\","
 						+ "\"satuan\":\"satuan\","
 						+ "\"tanggungan\":\"UMUM\""
 						+ "},"
@@ -119,8 +119,8 @@ public class PemakaianObatControllerTest {
 						+ "\"agama\": \"Kristen\","
 						+ "\"darah\": \"O\","
 						+ "\"kelamin\": \"PRIA\","
-						+ "\"nama\":\"Penduduk 2\","
-						+ "\"nik\":\"nik 2\","
+						+ "\"nama\":\"Penduduk xxxx\","
+						+ "\"nik\":\"nik xxxx\","
 						+ "\"tanggalLahir\":\"1991-12-05\","
 						+ "\"telepon\":\"telepon 2\","
 						+ "\"kode\": \"KODE\""

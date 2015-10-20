@@ -63,7 +63,7 @@ public class PemakaianBhpControllerTest {
 		Barang barang = new BahanHabisPakai();
 		barang.setHarga(20000l);
 		barang.setJumlah(20l);
-		barang.setKode("BHP01");
+		barang.setKode("BHPxxx");
 		barang.setNama("Bahan Habis Pakai");
 		barang.setSatuan("Satuan");
 		barang.setTanggungan(Tanggungan.BPJS);
@@ -72,8 +72,8 @@ public class PemakaianBhpControllerTest {
 		penduduk.setAgama("Kristen");
 		penduduk.setDarah("O");
 		penduduk.setKelamin(Kelamin.PRIA);
-		penduduk.setNama("Penduduk 1");
-		penduduk.setNik("Nik 1");
+		penduduk.setNama("Penduduk xxx");
+		penduduk.setNik("Nik xxx");
 		penduduk.setTanggalLahir(DateUtil.getDate());
 		penduduk.setTelepon("Telepon");
 		penduduk.generateKode();
@@ -107,8 +107,8 @@ public class PemakaianBhpControllerTest {
 				.content("{\"bahanHabisPakai\": {"
 						+ "\"harga\": \"20000\","
 						+ "\"jumlah\": \"100\","
-						+ "\"kode\": \"BHP02\","
-						+ "\"nama\":\"BHP 2\","
+						+ "\"kode\": \"BHPxxxx\","
+						+ "\"nama\":\"BHP xxxx\","
 						+ "\"satuan\":\"satuan\","
 						+ "\"tanggungan\":\"UMUM\""
 						+ "},"
@@ -117,8 +117,8 @@ public class PemakaianBhpControllerTest {
 						+ "\"agama\": \"Kristen\","
 						+ "\"darah\": \"O\","
 						+ "\"kelamin\": \"PRIA\","
-						+ "\"nama\":\"Penduduk 2\","
-						+ "\"nik\":\"nik 2\","
+						+ "\"nama\":\"Penduduk xxxx\","
+						+ "\"nik\":\"nik xxxx\","
 						+ "\"tanggalLahir\":\"1991-12-05\","
 						+ "\"telepon\":\"telepon 2\","
 						+ "\"kode\": \"KODE\""
