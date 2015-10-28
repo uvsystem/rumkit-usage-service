@@ -7,9 +7,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.dbsys.rs.lib.DateUtil;
+import com.dbsys.rs.lib.NumberException;
+import com.dbsys.rs.lib.entity.Barang;
 import com.dbsys.rs.lib.entity.Pemakaian;
 import com.dbsys.rs.lib.entity.PemakaianBhp;
 import com.dbsys.rs.lib.entity.PemakaianObat;
+import com.dbsys.rs.usage.repository.BarangRepository;
 import com.dbsys.rs.usage.repository.PemakaianRepository;
 import com.dbsys.rs.usage.service.PemakaianService;
 
@@ -19,13 +22,21 @@ public class PemakaianServiceImpl implements PemakaianService {
 
 	@Autowired
 	private PemakaianRepository pemakaianRepository;
+	@Autowired
+	private BarangRepository barangRepository;
 	
 	@Override
 	@Transactional(readOnly = false)
-	public Pemakaian simpan(Pemakaian pemakaian) {
+	public Pemakaian simpan(Pemakaian pemakaian) throws NumberException {
 		if (pemakaian.getTanggal() == null)
 			pemakaian.setTanggal(DateUtil.getDate());
-		return pemakaianRepository.save(pemakaian);
+		pemakaian = pemakaianRepository.save(pemakaian);
+
+		Barang barang = pemakaian.getBarang();
+		barang.substract(pemakaian.getJumlah());
+		barangRepository.save(barang);
+		
+		return pemakaian;
 	}
 
 	@Override

@@ -2,6 +2,7 @@ package com.dbsys.rs.usage.service;
 
 import java.util.List;
 
+import com.dbsys.rs.lib.NumberException;
 import com.dbsys.rs.lib.entity.Pemakaian;
 import com.dbsys.rs.lib.entity.PemakaianBhp;
 import com.dbsys.rs.lib.entity.PemakaianObat;
@@ -20,8 +21,9 @@ public interface PemakaianService {
 	 * @param pemakaian
 	 * 
 	 * @return pemakaian yang berhasil disimpan
+	 * @throws NumberException jumlah barang tidak mencukupi untuk dikurangi 
 	 */
-	Pemakaian simpan(Pemakaian pemakaian);
+	Pemakaian simpan(Pemakaian pemakaian) throws NumberException;
 
 	/**
 	 * Mengambil pemakaian barang berdasarkan id.

@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 
 import com.dbsys.rs.lib.DateUtil;
+import com.dbsys.rs.lib.NumberException;
 import com.dbsys.rs.lib.Tanggungan;
 import com.dbsys.rs.lib.entity.Barang;
 import com.dbsys.rs.lib.entity.ObatFarmasi;
@@ -55,7 +56,7 @@ public class PemakaianObatControllerTest {
 	private PemakaianObat pemakaian;
 	
 	@Before
-	public void setup() {
+	public void setup() throws NumberException {
 		this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).build();
 		
 		count = pemakaianRepository.count();
