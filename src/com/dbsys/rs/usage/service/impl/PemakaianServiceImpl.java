@@ -10,8 +10,6 @@ import com.dbsys.rs.lib.DateUtil;
 import com.dbsys.rs.lib.NumberException;
 import com.dbsys.rs.lib.entity.Barang;
 import com.dbsys.rs.lib.entity.Pemakaian;
-import com.dbsys.rs.lib.entity.PemakaianBhp;
-import com.dbsys.rs.lib.entity.PemakaianObat;
 import com.dbsys.rs.usage.repository.BarangRepository;
 import com.dbsys.rs.usage.repository.PemakaianRepository;
 import com.dbsys.rs.usage.service.PemakaianService;
@@ -28,15 +26,13 @@ public class PemakaianServiceImpl implements PemakaianService {
 	@Override
 	@Transactional(readOnly = false)
 	public Pemakaian simpan(Pemakaian pemakaian) throws NumberException {
-		if (pemakaian.getTanggal() == null)
-			pemakaian.setTanggal(DateUtil.getDate());
-		pemakaian = pemakaianRepository.save(pemakaian);
-
 		Barang barang = pemakaian.getBarang();
 		barang.substract(pemakaian.getJumlah());
 		barangRepository.save(barang);
-		
-		return pemakaian;
+
+		if (pemakaian.getTanggal() == null)
+			pemakaian.setTanggal(DateUtil.getDate());
+		return pemakaianRepository.save(pemakaian);
 	}
 
 	@Override
@@ -45,18 +41,12 @@ public class PemakaianServiceImpl implements PemakaianService {
 	}
 
 	@Override
-	public List<PemakaianBhp> getBhpByPasien(Long id) {
-		return pemakaianRepository.findAllPemakaianBhpByPasien(id);
+	public List<Pemakaian> getByPasien(Long id) {
+		return pemakaianRepository.findByPasien_Id(id);
 	}
 
 	@Override
-	public List<PemakaianObat> getObatByPasien(Long id) {
-		return pemakaianRepository.findAllPemakaianObatByPasien(id);
+	public List<Pemakaian> getByNomorResep(String nomorResep) {
+		return pemakaianRepository.findByNomorResep(nomorResep);
 	}
-
-	@Override
-	public List<PemakaianObat> getObatByNomorResep(String nomorResep) {
-		return pemakaianRepository.findAllPemakaianObatByNomorResep(nomorResep);
-	}
-
 }
