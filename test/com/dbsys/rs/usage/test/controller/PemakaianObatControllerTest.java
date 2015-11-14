@@ -119,7 +119,7 @@ public class PemakaianObatControllerTest {
 						+ "\"nama\":\"Obat xxxx\","
 						+ "\"satuan\":\"satuan\","
 						+ "\"penanggung\":\"UMUM\","
-						+ "\"name\": \"OBAT\""
+						+ "\"tipeBarang\": \"OBAT\""
 						+ "},"
 						+ "\"pasien\": {"
 						+ "\"penduduk\": {"

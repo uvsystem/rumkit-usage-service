@@ -119,7 +119,7 @@ public class PemakaianBhpControllerTest {
 						+ "\"nama\":\"BHP xxxx\","
 						+ "\"satuan\":\"satuan\","
 						+ "\"penanggung\":\"UMUM\","
-						+ "\"name\": \"BHP\""
+						+ "\"tipeBarang\": \"BHP\""
 						+ "},"
 						+ "\"pasien\": {"
 						+ "\"penduduk\": {"
