@@ -5,12 +5,12 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import com.dbsys.rs.lib.entity.Barang;
+import com.dbsys.rs.lib.entity.Pasien;
 
-public interface BarangRepository extends JpaRepository<Barang, Long> {
+public interface PasienRepository extends JpaRepository<Pasien, Long> {
 
 	@Modifying(clearAutomatically = true)
-	@Query("UPDATE Barang b SET b.jumlah = :jumlah WHERE b.id = :id")
-	void updateJumlah(@Param("id") Long id, @Param("jumlah") long jumlah);
+	@Query("UPDATE Pasien p SET p.totalTagihan = :tagihan WHERE p.id = :id")
+	void updateTagihan(@Param("id") Long id, @Param("tagihan") long tagihan);
 
 }

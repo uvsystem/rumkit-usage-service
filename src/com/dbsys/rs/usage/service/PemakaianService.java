@@ -50,4 +50,6 @@ public interface PemakaianService {
 	 */
 	List<Pemakaian> getByNomorResep(String nomorResep);
 
+	void hapus(Long id);
+
 }

@@ -9,8 +9,10 @@ import org.springframework.transaction.annotation.Transactional;
 import com.dbsys.rs.lib.DateUtil;
 import com.dbsys.rs.lib.NumberException;
 import com.dbsys.rs.lib.entity.Barang;
+import com.dbsys.rs.lib.entity.Pasien;
 import com.dbsys.rs.lib.entity.Pemakaian;
 import com.dbsys.rs.usage.repository.BarangRepository;
+import com.dbsys.rs.usage.repository.PasienRepository;
 import com.dbsys.rs.usage.repository.PemakaianRepository;
 import com.dbsys.rs.usage.service.PemakaianService;
 
@@ -22,17 +24,34 @@ public class PemakaianServiceImpl implements PemakaianService {
 	private PemakaianRepository pemakaianRepository;
 	@Autowired
 	private BarangRepository barangRepository;
+	@Autowired
+	private PasienRepository pasienRepository;
 	
 	@Override
 	@Transactional(readOnly = false)
 	public Pemakaian simpan(Pemakaian pemakaian) throws NumberException {
 		Barang barang = pemakaian.getBarang();
-		barang.substract(pemakaian.getJumlah());
-		barangRepository.save(barang);
+		barangRepository.updateJumlah(barang.getId(), (barang.getJumlah() + pemakaian.getJumlah()));
+		
+		Pasien pasien = pemakaian.getPasien();
+		pasienRepository.updateTagihan(pasien.getId(), (pasien.getTotalTagihan() + pemakaian.getTagihan()));
 
 		if (pemakaian.getTanggal() == null)
 			pemakaian.setTanggal(DateUtil.getDate());
 		return pemakaianRepository.save(pemakaian);
+	}
+	
+	@Override
+	public void hapus(Long id) {
+		Pemakaian pemakaian = pemakaianRepository.findOne(id);
+
+		Barang barang = pemakaian.getBarang();
+		barangRepository.updateJumlah(barang.getId(), (barang.getJumlah() - pemakaian.getJumlah()));
+		
+		Pasien pasien = pemakaian.getPasien();
+		pasienRepository.updateTagihan(pasien.getId(), (pasien.getTotalTagihan() - pemakaian.getTagihan()));
+
+		pemakaianRepository.delete(id);
 	}
 
 	@Override
