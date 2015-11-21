@@ -30,26 +30,34 @@ public class PemakaianServiceImpl implements PemakaianService {
 	@Override
 	@Transactional(readOnly = false)
 	public Pemakaian simpan(Pemakaian pemakaian) throws NumberException {
-		Barang barang = pemakaian.getBarang();
-		barangRepository.updateJumlah(barang.getId(), (barang.getJumlah() + pemakaian.getJumlah()));
-		
-		Pasien pasien = pemakaian.getPasien();
-		pasienRepository.updateTagihan(pasien.getId(), (pasien.getTotalTagihan() + pemakaian.getTagihan()));
+		Barang barang = barangRepository.findOne(pemakaian.getBarang().getId());
+		barang.substract(pemakaian.getJumlah());
+		pemakaian.setBarang(barang);
+
+		Pasien pasien = pasienRepository.findOne(pemakaian.getPasien().getId());
+		pasien.addTotalTagihan(pemakaian.getTagihan());
+		pemakaian.setPasien(pasien);
 
 		if (pemakaian.getTanggal() == null)
 			pemakaian.setTanggal(DateUtil.getDate());
-		return pemakaianRepository.save(pemakaian);
+		pemakaianRepository.save(pemakaian);
+
+		return pemakaian;
 	}
 	
 	@Override
+	@Transactional(readOnly = false)
 	public void hapus(Long id) {
 		Pemakaian pemakaian = pemakaianRepository.findOne(id);
 
-		Barang barang = pemakaian.getBarang();
-		barangRepository.updateJumlah(barang.getId(), (barang.getJumlah() - pemakaian.getJumlah()));
-		
-		Pasien pasien = pemakaian.getPasien();
-		pasienRepository.updateTagihan(pasien.getId(), (pasien.getTotalTagihan() - pemakaian.getTagihan()));
+		Barang barang = barangRepository.findOne(pemakaian.getBarang().getId());
+		long jumlahBarang = barang.getJumlah() + pemakaian.getJumlah();
+		barangRepository.updateJumlah(barang.getId(), jumlahBarang);
+
+		Pasien pasien = pasienRepository.findOne(pemakaian.getPasien().getId());
+		long tagihanPasien = pasien.getTotalTagihan() == null ? 0 : pasien.getTotalTagihan();
+		long totalTagihan = tagihanPasien - pemakaian.getTagihan();
+		pasienRepository.updateTagihan(pasien.getId(), totalTagihan);
 
 		pemakaianRepository.delete(id);
 	}
