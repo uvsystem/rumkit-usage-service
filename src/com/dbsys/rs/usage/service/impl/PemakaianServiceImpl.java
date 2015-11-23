@@ -35,6 +35,20 @@ public class PemakaianServiceImpl implements PemakaianService {
 		pemakaian.setBarang(barang);
 
 		Pasien pasien = pasienRepository.findOne(pemakaian.getPasien().getId());
+
+		/**
+		 * Jika pemakaian PERSISTED (merupakan fungsi update),
+		 * kurangi total tagihan pasien, sesuai tagihan pemakaian yang lama.
+		 */
+		if (pemakaian.isPersisted()) {
+			Pemakaian pemakaianOld = pemakaianRepository.findOne(pemakaian.getId());
+			
+			pasien.substractTotalTagihan(pemakaianOld.getTagihan());
+		}
+		
+		/**
+		 * Tambahkan tagihan pemakaian yang baru ke total tagihan pasien.
+		 */
 		pasien.addTotalTagihan(pemakaian.getTagihan());
 		pemakaian.setPasien(pasien);
 
