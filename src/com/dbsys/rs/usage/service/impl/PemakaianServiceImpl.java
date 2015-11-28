@@ -31,7 +31,16 @@ public class PemakaianServiceImpl implements PemakaianService {
 	@Override
 	@Transactional(readOnly = false)
 	public Pemakaian simpan(Pemakaian pemakaian) throws PasienOutException, NumberException {
+		/*
+		 * Jumlah pemakaian harus lebih dari 0.
+		 */
+		if (pemakaian.getJumlah() <= 0)
+			throw new NumberException("Jumlah pemakaian harus lebih dari 0");
+		
 		Pasien pasien = pasienRepository.findOne(pemakaian.getPasien().getId());
+		/*
+		 * Jika pasien sudah keluar, tidak bisa menambah pemakaian.
+		 */
 		if (Pasien.StatusPasien.KELUAR.equals(pasien.getStatus()))
 			throw new PasienOutException("Tidak bisa menambah tagihan untuk pasien yang sudah keluar");
 
@@ -39,7 +48,7 @@ public class PemakaianServiceImpl implements PemakaianService {
 		barang.substract(pemakaian.getJumlah());
 		pemakaian.setBarang(barang);
 
-		/**
+		/*
 		 * Jika pemakaian PERSISTED (merupakan fungsi update),
 		 * kurangi total tagihan pasien, sesuai tagihan pemakaian yang lama.
 		 */
@@ -49,7 +58,7 @@ public class PemakaianServiceImpl implements PemakaianService {
 			pasien.substractTotalTagihan(pemakaianOld.getTagihan());
 		}
 		
-		/**
+		/*
 		 * Tambahkan tagihan pemakaian yang baru ke total tagihan pasien.
 		 */
 		pasien.addTotalTagihan(pemakaian.getTagihan());

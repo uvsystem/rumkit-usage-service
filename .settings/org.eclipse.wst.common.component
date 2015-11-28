@@ -7,7 +7,7 @@
         <dependent-module archiveName="rumkit-security-0.1.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/rumkit-security/rumkit-security">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <dependent-module archiveName="rumkit-library-0.5.2-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/rumkit-library/rumkit-library">
+        <dependent-module archiveName="rumkit-library-0.5.3-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/rumkit-library/rumkit-library">
             <dependency-type>uses</dependency-type>
         </dependent-module>
         <property name="context-root" value="rumkit-usage-service"/>
