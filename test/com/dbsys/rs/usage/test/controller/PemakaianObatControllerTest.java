@@ -21,6 +21,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 import com.dbsys.rs.lib.DateUtil;
 import com.dbsys.rs.lib.NumberException;
+import com.dbsys.rs.lib.PasienOutException;
 import com.dbsys.rs.lib.Penanggung;
 import com.dbsys.rs.lib.entity.Barang;
 import com.dbsys.rs.lib.entity.ObatFarmasi;
@@ -56,7 +57,7 @@ public class PemakaianObatControllerTest {
 	private Pemakaian pemakaian;
 	
 	@Before
-	public void setup() throws NumberException {
+	public void setup() throws NumberException, PasienOutException {
 		this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).build();
 		
 		count = pemakaianRepository.count();

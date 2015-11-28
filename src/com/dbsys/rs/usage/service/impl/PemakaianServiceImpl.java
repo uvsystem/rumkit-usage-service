@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.dbsys.rs.lib.DateUtil;
 import com.dbsys.rs.lib.NumberException;
+import com.dbsys.rs.lib.PasienOutException;
 import com.dbsys.rs.lib.entity.Barang;
 import com.dbsys.rs.lib.entity.Pasien;
 import com.dbsys.rs.lib.entity.Pemakaian;
@@ -29,12 +30,14 @@ public class PemakaianServiceImpl implements PemakaianService {
 	
 	@Override
 	@Transactional(readOnly = false)
-	public Pemakaian simpan(Pemakaian pemakaian) throws NumberException {
+	public Pemakaian simpan(Pemakaian pemakaian) throws PasienOutException, NumberException {
+		Pasien pasien = pasienRepository.findOne(pemakaian.getPasien().getId());
+		if (Pasien.StatusPasien.KELUAR.equals(pasien.getStatus()))
+			throw new PasienOutException("Tidak bisa menambah tagihan untuk pasien yang sudah keluar");
+
 		Barang barang = barangRepository.findOne(pemakaian.getBarang().getId());
 		barang.substract(pemakaian.getJumlah());
 		pemakaian.setBarang(barang);
-
-		Pasien pasien = pasienRepository.findOne(pemakaian.getPasien().getId());
 
 		/**
 		 * Jika pemakaian PERSISTED (merupakan fungsi update),
