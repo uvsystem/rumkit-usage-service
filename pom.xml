@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.dbsys.rs</groupId>
   <artifactId>rumkit-usage-service</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>0.2.0-SNAPSHOT</version>
   <packaging>war</packaging>
 
   <build>
@@ -50,6 +50,7 @@
 	<taglibs.version>1.1.2</taglibs.version>
 	<slf4j.version>1.7.7</slf4j.version>
 	<jayway.version>0.8.1</jayway.version>
+	<rumkit-security.version>0.1.0-SNAPSHOT</rumkit-security.version>
   </properties>
 
   <dependencies>
@@ -212,7 +213,7 @@
 	<dependency>
 	    <groupId>com.dbsys.rs</groupId>
 	    <artifactId>rumkit-security</artifactId>
-	    <version>0.0.11-SNAPSHOT</version>
+	    <version>${rumkit-security.version}</version>
 	</dependency>
   </dependencies>
 

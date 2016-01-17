@@ -21,15 +21,16 @@ import org.springframework.web.context.WebApplicationContext;
 
 import com.dbsys.rs.lib.DateUtil;
 import com.dbsys.rs.lib.NumberException;
-import com.dbsys.rs.lib.Tanggungan;
+import com.dbsys.rs.lib.PasienOutException;
+import com.dbsys.rs.lib.Penanggung;
 import com.dbsys.rs.lib.entity.BahanHabisPakai;
 import com.dbsys.rs.lib.entity.Barang;
 import com.dbsys.rs.lib.entity.Pasien;
+import com.dbsys.rs.lib.entity.Unit;
+import com.dbsys.rs.lib.entity.Pasien.Perawatan;
 import com.dbsys.rs.lib.entity.Pemakaian;
-import com.dbsys.rs.lib.entity.PemakaianBhp;
 import com.dbsys.rs.lib.entity.Penduduk;
 import com.dbsys.rs.lib.entity.Pasien.StatusPasien;
-import com.dbsys.rs.lib.entity.Pasien.Type;
 import com.dbsys.rs.lib.entity.Penduduk.Kelamin;
 import com.dbsys.rs.usage.repository.PemakaianRepository;
 import com.dbsys.rs.usage.service.PemakaianService;
@@ -56,7 +57,7 @@ public class PemakaianBhpControllerTest {
 	private Pemakaian pemakaian;
 	
 	@Before
-	public void setup() throws NumberException {
+	public void setup() throws NumberException, PasienOutException {
 		this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).build();
 		
 		count = pemakaianRepository.count();
@@ -67,7 +68,7 @@ public class PemakaianBhpControllerTest {
 		barang.setKode("BHPxxx");
 		barang.setNama("Bahan Habis Pakai");
 		barang.setSatuan("Satuan");
-		barang.setTanggungan(Tanggungan.BPJS);
+		barang.setPenanggung(Penanggung.BPJS);
 		
 		Penduduk penduduk = new Penduduk();
 		penduduk.setAgama("Kristen");
@@ -81,19 +82,26 @@ public class PemakaianBhpControllerTest {
 
 		Pasien pasien = new Pasien();
 		pasien.setPenduduk(penduduk);
-		pasien.setTanggungan(Tanggungan.BPJS);
-		pasien.setStatus(StatusPasien.OPEN);
-		pasien.setTipe(Type.RAWAT_JALAN);
+		pasien.setPenanggung(Penanggung.BPJS);
+		pasien.setStatus(StatusPasien.PERAWATAN);
+		pasien.setTipePerawatan(Perawatan.RAWAT_JALAN);
 		pasien.setTanggalMasuk(DateUtil.getDate());
 		pasien.generateKode();
+		
+		Unit unit = new Unit();
+		unit.setNama("Nama Unit xxxxxxxx");
+		unit.setTipe(Unit.TipeUnit.APOTEK_FARMASI);
+		unit.setBobot(1f);
 
-		pemakaian = new PemakaianBhp();
+		pemakaian = new Pemakaian();
 		pemakaian.setBarang(barang);
 		pemakaian.setPasien(pasien);
 		pemakaian.setBiayaTambahan(10000L);
+		pemakaian.setUnit(unit);
 		pemakaian.setJumlah(2);
 		pemakaian.setKeterangan("Biaya Administrasi");
 		pemakaian.setTanggal(DateUtil.getDate());
+		pemakaian.setNomorResep("01101");
 		pemakaian = pemakaianService.simpan(pemakaian);
 
 		assertEquals(count + 1, pemakaianRepository.count());
@@ -103,15 +111,16 @@ public class PemakaianBhpControllerTest {
 	@Test
 	public void testSimpan() throws Exception {
 		this.mockMvc.perform(
-				post("/bhp")
+				post("/pemakaian")
 				.contentType(MediaType.APPLICATION_JSON)
-				.content("{\"bahanHabisPakai\": {"
+				.content("{\"barang\": {"
 						+ "\"harga\": \"20000\","
 						+ "\"jumlah\": \"100\","
 						+ "\"kode\": \"BHPxxxx\","
 						+ "\"nama\":\"BHP xxxx\","
 						+ "\"satuan\":\"satuan\","
-						+ "\"tanggungan\":\"UMUM\""
+						+ "\"penanggung\":\"UMUM\","
+						+ "\"tipeBarang\": \"BHP\""
 						+ "},"
 						+ "\"pasien\": {"
 						+ "\"penduduk\": {"
@@ -124,16 +133,22 @@ public class PemakaianBhpControllerTest {
 						+ "\"telepon\":\"telepon 2\","
 						+ "\"kode\": \"KODE\""
 						+ "},"
-						+ "\"tanggungan\": \"BPJS\","
-						+ "\"status\": \"OPEN\","
-						+ "\"tipe\": \"RAWAT_JALAN\","
+						+ "\"penanggung\": \"BPJS\","
+						+ "\"status\": \"PERAWATAN\","
+						+ "\"tipePerawatan\": \"RAWAT_JALAN\","
 						+ "\"tanggalMasuk\": \"2015-10-1\","
 						+ "\"kode\": \"KODE\""
+						+ "},"
+						+ "\"unit\":{"
+						+ "\"nama\": \"Unit xxxxxxxxx\","
+						+ "\"tipe\": \"APOTEK_FARMASI\","
+						+ "\"bobot\": \"1\""
 						+ "},"
 						+ "\"biayaTambahan\":\"10000\","
 						+ "\"jumlah\":\"2\","
 						+ "\"keterangan\":\"Keterangan\","
-						+ "\"tanggal\":\"2015-10-14\""
+						+ "\"tanggal\":\"2015-10-14\","
+						+ "\"nomorResep\": \"010101\""
 						+ "}")
 			)
 			.andExpect(jsonPath("$.tipe").value("ENTITY"))
@@ -146,7 +161,7 @@ public class PemakaianBhpControllerTest {
 	@Test
 	public void testGetById() throws Exception {
 		this.mockMvc.perform(
-				get(String.format("/bhp/%d", pemakaian.getId()))
+				get(String.format("/pemakaian/%d", pemakaian.getId()))
 				.contentType(MediaType.APPLICATION_JSON)
 			)
 			.andExpect(jsonPath("$.tipe").value("ENTITY"))
@@ -156,7 +171,17 @@ public class PemakaianBhpControllerTest {
 	@Test
 	public void testGetByPasien() throws Exception {
 		this.mockMvc.perform(
-				get(String.format("/bhp/pasien/%d", pemakaian.getPasien().getId()))
+				get(String.format("/pemakaian/pasien/%d", pemakaian.getPasien().getId()))
+				.contentType(MediaType.APPLICATION_JSON)
+			)
+			.andExpect(jsonPath("$.tipe").value("LIST"))
+			.andExpect(jsonPath("$.message").value("Berhasil"));
+	}
+
+	@Test
+	public void testGetByNomorResep() throws Exception {
+		this.mockMvc.perform(
+				get(String.format("/pemakaian/nomor/%s", pemakaian.getNomorResep()))
 				.contentType(MediaType.APPLICATION_JSON)
 			)
 			.andExpect(jsonPath("$.tipe").value("LIST"))

@@ -2,10 +2,10 @@ package com.dbsys.rs.usage.service;
 
 import java.util.List;
 
+import com.dbsys.rs.lib.ApplicationException;
 import com.dbsys.rs.lib.NumberException;
+import com.dbsys.rs.lib.PasienOutException;
 import com.dbsys.rs.lib.entity.Pemakaian;
-import com.dbsys.rs.lib.entity.PemakaianBhp;
-import com.dbsys.rs.lib.entity.PemakaianObat;
 
 /**
  * Interface untuk mengelola data pemakaian.
@@ -22,8 +22,9 @@ public interface PemakaianService {
 	 * 
 	 * @return pemakaian yang berhasil disimpan
 	 * @throws NumberException jumlah barang tidak mencukupi untuk dikurangi 
+	 * @throws ApplicationException 
 	 */
-	Pemakaian simpan(Pemakaian pemakaian) throws NumberException;
+	Pemakaian simpan(Pemakaian pemakaian) throws NumberException, PasienOutException;
 
 	/**
 	 * Mengambil pemakaian barang berdasarkan id.
@@ -35,22 +36,13 @@ public interface PemakaianService {
 	Pemakaian getById(Long id);
 
 	/**
-	 * Mengambil daftar pemakaian bhp berdasarkan pasien.
+	 * Mengambil daftar bhp berdasarkan pasien.
 	 * 
 	 * @param id
 	 * 
 	 * @return daftar pemakaian barang
 	 */
-	List<PemakaianBhp> getBhpByPasien(Long id);
-
-	/**
-	 * Mengambil daftar pemakaian obat berdasarkan pasien.
-	 * 
-	 * @param id
-	 * 
-	 * @return daftar pemakaian barang
-	 */
-	List<PemakaianObat> getObatByPasien(Long id);
+	List<Pemakaian> getByPasien(Long id);
 
 	/**
 	 * Mengambil daftar pemakaian obat berdasarkan nomor resep.
@@ -59,6 +51,8 @@ public interface PemakaianService {
 	 * 
 	 * @return daftar pemakaian obat
 	 */
-	List<PemakaianObat> getObatByNomorResep(String nomorResep);
+	List<Pemakaian> getByNomorResep(String nomorResep);
+
+	void hapus(Long id);
 
 }
