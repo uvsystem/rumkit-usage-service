@@ -4,9 +4,6 @@
         <wb-resource deploy-path="/" source-path="/WebContent" tag="defaultRootSource"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/test"/>
-        <dependent-module archiveName="rumkit-security-0.1.0-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/rumkit-security/rumkit-security">
-            <dependency-type>uses</dependency-type>
-        </dependent-module>
         <dependent-module archiveName="rumkit-library-0.5.3-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/rumkit-library/rumkit-library">
             <dependency-type>uses</dependency-type>
         </dependent-module>
